@@ -1,0 +1,42 @@
+{
+  "name": "filmtools/parser",
+  "type": "library",
+
+  "license": "MIT",
+
+  "authors": [
+    {
+      "name":  "Carsten Witt",
+      "role":  "Author"
+    }
+  ],
+
+  "autoload": {
+    "psr-4": {
+      "FilmTools\\Parser\\": "src/"
+    }
+  },
+
+  "require": {
+  	"php": "^7.1",
+    "league/csv": "^9.2"
+  },
+
+	"autoload-dev": {
+	  	"psr-4": { "tests\\": "tests/src" }
+	},
+
+  "require-dev": {
+      "php-coveralls/php-coveralls": "^2.0",
+      "phpunit/phpunit": "^5.7|^6.0|^7.0",
+      "spatie/phpunit-watcher": "^1.8"
+  },
+
+  "scripts": {
+        "phpunit": "phpunit --colors=auto",
+        "watch": "phpunit-watcher watch",
+        "test": [
+            "@phpunit"
+        ]
+  }
+}
