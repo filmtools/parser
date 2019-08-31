@@ -4,6 +4,7 @@ namespace FilmTools\Parser;
 use League\Csv\Reader;
 use League\Csv\Statement;
 use League\Csv\Exception as CsvException;
+use Webuni\FrontMatter\FrontMatter;
 use function League\Csv\delimiter_detect;
 
 class CsvParser implements ParserInterface
@@ -39,8 +40,33 @@ class CsvParser implements ParserInterface
         try {
             // May throw ParserException
             $this->assertReadableFile( $file );
+
             $csv = Reader::createFromPath($file);
             return $this->processRecords( $csv );
+        }
+        catch (CsvException $e) {
+            throw new ParserException("Problem when parsing file", 0, $e);
+        }
+    }
+
+
+    /**
+     * @inheritDoc
+     * @return ArrayIterator
+     */
+    public function parseWithoutFrontMatter( $file ) : \Traversable
+    {
+        try {
+            // May throw ParserException
+            $this->assertReadableFile( $file );
+
+            $csv_text = file_get_contents( $file );
+            $document = (new FrontMatter)->parse($csv_text);
+
+            // $data = $document->getData();
+            $content = $document->getContent();
+
+            return $this->parseString( $content );
         }
         catch (CsvException $e) {
             throw new ParserException("Problem when parsing file", 0, $e);
