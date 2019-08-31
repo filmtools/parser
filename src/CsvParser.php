@@ -32,21 +32,45 @@ class CsvParser implements ParserInterface
 
     /**
      * @inheritDoc
-     *
-     * @param  string $file CSV file path
      * @return ArrayIterator
      */
     public function parse( $file ) : \Traversable
     {
-        // May throw ParserException
-        $this->assertReadableFile( $file );
-
         try {
+            // May throw ParserException
+            $this->assertReadableFile( $file );
             $csv = Reader::createFromPath($file);
+            return $this->processRecords( $csv );
         }
         catch (CsvException $e) {
             throw new ParserException("Problem when parsing file", 0, $e);
         }
+    }
+
+
+    /**
+     * @inheritDoc
+     * @return ArrayIterator
+     */
+    public function parseString( string $csv_text ) : \Traversable
+    {
+        try {
+            $csv = Reader::createFromString($csv_text);
+            return $this->processRecords( $csv );
+        }
+        catch (CsvException $e) {
+            throw new ParserException("Problem when parsing file", 0, $e);
+        }
+    }
+
+
+
+    /**
+     * @param  Reader $csv League CSV Reader instance
+     * @return ArrayIterator
+     */
+    protected function processRecords( Reader $csv ) : \Traversable
+    {
 
         // Start working with Reader instance
         $delimiter = $this->detectDelimiters( $csv );
@@ -66,7 +90,10 @@ class CsvParser implements ParserInterface
 
         // Create an Iterator from the Generator. Sort of Workaround.
         return new \ArrayIterator(iterator_to_array( $records_generator ));
+
     }
+
+
 
 
     /**

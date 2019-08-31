@@ -5,8 +5,14 @@ interface ParserInterface
 {
 
     /**
-     * @param  mxied $file  things to parse
+     * @param  mixed $file  CSV file to parse
      * @return \Traversable
      */
     public function parse( $file ) : \Traversable;
+
+    /**
+     * @param  string $csv_text Things to parse
+     * @return \Traversable
+     */
+    public function parseString( string $csv_text ) : \Traversable;
 }
