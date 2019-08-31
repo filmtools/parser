@@ -36,6 +36,7 @@ catch (ParserExceptionInterface $e) {
 ```php
 try {
 	$records = $parser->parse("data.csv");
+  $records = $parser->parseString( file_get_contents("data.csv"));
   
 	foreach($records as $row):
   	// Do things with \Traversable
